@@ -1,0 +1,14 @@
+{
+  "name": "com.euglenach.lotteria",
+  "version": "0.1.0",
+  "displayName": "Lotteria",
+  "description": "simple lottery system for C#",
+  "dependencies": {
+    "com.unity.mathematics": "1.2.6"
+  },
+  "author": {
+    "name": "euglenach"
+  },
+  "license": "MIT",
+  "category": "Scripting"
+}
