@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Random = Unity.Mathematics.Random;
 
@@ -68,9 +69,14 @@ namespace LotterySystem
         {
             return ref True(0.5f)? ref item1 : ref item2;
         }
-        public int GetRandomIndex(params int[] weightTable)
+
+        #region GetRandomIndex
+        
+        public int GetRandomIndex(params int[] weightTable) => GetRandomIndex((ReadOnlySpan<int>)weightTable);
+        
+        public int GetRandomIndex(ReadOnlySpan<int> weightTable)
         {
-            var totalWeight = weightTable.Sum();
+            var totalWeight = SumWeight(weightTable);
             var value = random.NextInt(1, totalWeight + 1);
             var retIndex = -1;
             for (var i = 0; i < weightTable.Length; ++i)
@@ -85,26 +91,13 @@ namespace LotterySystem
             return retIndex;
         }
         
-        public ref int WeightRandom(int[] weightTable)
-        {
-            var totalWeight = weightTable.Sum();
-            var value = random.NextInt(1, totalWeight + 1);
-            var retIndex = -1;
-            for (var i = 0; i < weightTable.Length; ++i)
-            {
-                if (weightTable[i] >= value)
-                {
-                    retIndex = i;
-                    break;
-                }
-                value -= weightTable[i];
-            }
-            return ref weightTable[retIndex];
-        }
+        public int GetRandomIndex(params IWeight[] weightTable) => GetRandomIndex((ReadOnlySpan<IWeight>)weightTable);
         
-        public int GetRandomIndex(params IWeight[] weightTable)
+        public int GetRandomIndex<TWeight>(params TWeight[] weightTable) where TWeight : IWeight => GetRandomIndex((ReadOnlySpan<TWeight>)weightTable);
+        
+        public int GetRandomIndex(ReadOnlySpan<IWeight> weightTable)
         {
-            var totalWeight = weightTable.Sum(w => w.Weight);
+            var totalWeight = SumWeight(weightTable);
             var value = random.NextInt(1, totalWeight + 1);
             var retIndex = -1;
             for (var i = 0; i < weightTable.Length; ++i)
@@ -119,26 +112,9 @@ namespace LotterySystem
             return retIndex;
         }
         
-        public ref IWeight WeightRandom(IWeight[] weightTable)
+        public int GetRandomIndex<TWeight>(ReadOnlySpan<TWeight> weightTable) where TWeight : IWeight
         {
-            var totalWeight = weightTable.Sum(w => w.Weight);
-            var value = random.NextInt(1, totalWeight + 1);
-            var retIndex = -1;
-            for (var i = 0; i < weightTable.Length; ++i)
-            {
-                if (weightTable[i].Weight >= value)
-                {
-                    retIndex = i;
-                    break;
-                }
-                value -= weightTable[i].Weight;
-            }
-            return ref weightTable[retIndex];
-        }
-        
-        public int GetRandomIndex<TWeight>(params TWeight[] weightTable) where TWeight : IWeight
-        {
-            var totalWeight = weightTable.Sum(w => w.Weight);
+            var totalWeight = SumWeight(weightTable);
             var value = random.NextInt(1, totalWeight + 1);
             var retIndex = -1;
             for (var i = 0; i < weightTable.Length; ++i)
@@ -153,21 +129,69 @@ namespace LotterySystem
             return retIndex;
         }
         
-        public ref TWeight WeightRandom<TWeight>(TWeight[] weightTable) where TWeight : IWeight
+        #endregion GetRandomIndex
+
+        #region WeightRandom
+        
+        public IWeight WeightRandom(params IWeight[] weightTable) => WeightRandom((ReadOnlySpan<IWeight>)weightTable);
+        public TWeight WeightRandom<TWeight>(params TWeight[] weightTable) where TWeight : IWeight => WeightRandom((ReadOnlySpan<TWeight>)weightTable);
+
+        public IWeight WeightRandom(ReadOnlySpan<IWeight> weightTable)
         {
-            var totalWeight = weightTable.Sum(w => w.Weight);
-            var value = random.NextInt(1, totalWeight + 1);
-            var retIndex = -1;
-            for (var i = 0; i < weightTable.Length; ++i)
+            var index = GetRandomIndex(weightTable);
+            return weightTable[index];
+        }
+        
+        public TWeight WeightRandom<TWeight>(ReadOnlySpan<TWeight> weightTable) where TWeight : IWeight
+        {
+            var index = GetRandomIndex(weightTable);
+            return weightTable[index];
+        }
+        
+        public ref IWeight WeightRandomRef(params IWeight[] weightTable)
+        {
+            var index = GetRandomIndex(weightTable);
+            return ref weightTable[index];
+        }
+        
+        public ref TWeight WeightRandomRef<TWeight>(params TWeight[] weightTable) where TWeight : IWeight
+        {
+            var index = GetRandomIndex(weightTable);
+            return ref weightTable[index];
+        }
+        #endregion
+
+        int SumWeight(ReadOnlySpan<IWeight> table)
+        {
+            var sum = 0;
+            foreach(var weight in table)
             {
-                if (weightTable[i].Weight >= value)
-                {
-                    retIndex = i;
-                    break;
-                }
-                value -= weightTable[i].Weight;
+                sum += weight.Weight;
             }
-            return ref weightTable[retIndex];
+
+            return sum;
+        }
+        
+        int SumWeight<TWeight>(ReadOnlySpan<TWeight> table) where TWeight : IWeight
+        {
+            var sum = 0;
+            foreach(var weight in table)
+            {
+                sum += weight.Weight;
+            }
+
+            return sum;
+        }
+        
+        int SumWeight(ReadOnlySpan<int> table)
+        {
+            var sum = 0;
+            foreach(var weight in table)
+            {
+                sum += weight;
+            }
+
+            return sum;
         }
     }
 }

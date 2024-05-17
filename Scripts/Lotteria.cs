@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Random = UnityEngine.Random;
 
@@ -31,15 +32,26 @@ namespace LotterySystem
         public static ref T Select<T>(ref T item1, ref T item2) => ref core.Select(ref item1, ref item2);
 
         public static int GetRandomIndex(params int[] weightTable) => core.GetRandomIndex(weightTable);
-
-        public static ref int WeightRandom(int[] weightTable) => ref core.WeightRandom(weightTable);
+        
+        public static int GetRandomIndex(ReadOnlySpan<int> weightTable) => core.GetRandomIndex(weightTable);
 
         public static int GetRandomIndex(params IWeight[] weightTable) => core.GetRandomIndex(weightTable);
         
-        public static int GetRandomIndex<TWeight>(TWeight[] weightTable) where TWeight : IWeight => core.GetRandomIndex(weightTable);
-
-        public static ref IWeight WeightRandom(IWeight[] weightTable) => ref core.WeightRandom(weightTable);
+        public static int GetRandomIndex<TWeight>(params TWeight[] weightTable) where TWeight : IWeight => core.GetRandomIndex(weightTable);
         
-        public static ref TWeight WeightRandom<TWeight>(TWeight[] weightTable) where TWeight : IWeight => ref core.WeightRandom(weightTable);
+        public static int GetRandomIndex(ReadOnlySpan<IWeight> weightTable) => core.GetRandomIndex(weightTable);
+        public static int GetRandomIndex<TWeight>(ReadOnlySpan<TWeight> weightTable) where TWeight : IWeight => core.GetRandomIndex(weightTable);
+        
+        public static IWeight WeightRandom(params IWeight[] weightTable) => core.WeightRandom(weightTable);
+        
+        public static TWeight WeightRandom<TWeight>(params TWeight[] weightTable) where TWeight : IWeight => core.WeightRandom(weightTable);
+        
+        public static IWeight WeightRandom(ReadOnlySpan<IWeight> weightTable) => core.WeightRandom(weightTable);
+        
+        public static TWeight WeightRandom<TWeight>(ReadOnlySpan<TWeight> weightTable) where TWeight : IWeight => core.WeightRandom(weightTable);
+        
+        public static ref IWeight WeightRandomRef(params IWeight[] weightTable) => ref core.WeightRandomRef(weightTable);
+        
+        public static ref TWeight WeightRandomRef<TWeight>(params TWeight[] weightTable) where TWeight : IWeight => ref core.WeightRandomRef(weightTable);
     }
 }
