@@ -32,10 +32,14 @@ namespace LotterySystem
 
         public static int GetRandomIndex(params int[] weightTable) => core.GetRandomIndex(weightTable);
 
-        public static ref int WeightRandom(ref int[] weightTable) => ref core.WeightRandom(ref weightTable);
+        public static ref int WeightRandom(int[] weightTable) => ref core.WeightRandom(weightTable);
 
         public static int GetRandomIndex(params IWeight[] weightTable) => core.GetRandomIndex(weightTable);
+        
+        public static int GetRandomIndex<TWeight>(TWeight[] weightTable) where TWeight : IWeight => core.GetRandomIndex(weightTable);
 
-        public static ref IWeight WeightRandom(ref IWeight[] weightTable) => ref core.WeightRandom(ref weightTable);
+        public static ref IWeight WeightRandom(IWeight[] weightTable) => ref core.WeightRandom(weightTable);
+        
+        public static ref TWeight WeightRandom<TWeight>(TWeight[] weightTable) where TWeight : IWeight => ref core.WeightRandom(weightTable);
     }
 }

@@ -85,7 +85,7 @@ namespace LotterySystem
             return retIndex;
         }
         
-        public ref int WeightRandom(ref int[] weightTable)
+        public ref int WeightRandom(int[] weightTable)
         {
             var totalWeight = weightTable.Sum();
             var value = random.NextInt(1, totalWeight + 1);
@@ -119,7 +119,41 @@ namespace LotterySystem
             return retIndex;
         }
         
-        public ref IWeight WeightRandom(ref IWeight[] weightTable)
+        public ref IWeight WeightRandom(IWeight[] weightTable)
+        {
+            var totalWeight = weightTable.Sum(w => w.Weight);
+            var value = random.NextInt(1, totalWeight + 1);
+            var retIndex = -1;
+            for (var i = 0; i < weightTable.Length; ++i)
+            {
+                if (weightTable[i].Weight >= value)
+                {
+                    retIndex = i;
+                    break;
+                }
+                value -= weightTable[i].Weight;
+            }
+            return ref weightTable[retIndex];
+        }
+        
+        public int GetRandomIndex<TWeight>(params TWeight[] weightTable) where TWeight : IWeight
+        {
+            var totalWeight = weightTable.Sum(w => w.Weight);
+            var value = random.NextInt(1, totalWeight + 1);
+            var retIndex = -1;
+            for (var i = 0; i < weightTable.Length; ++i)
+            {
+                if (weightTable[i].Weight >= value)
+                {
+                    retIndex = i;
+                    break;
+                }
+                value -= weightTable[i].Weight;
+            }
+            return retIndex;
+        }
+        
+        public ref TWeight WeightRandom<TWeight>(TWeight[] weightTable) where TWeight : IWeight
         {
             var totalWeight = weightTable.Sum(w => w.Weight);
             var value = random.NextInt(1, totalWeight + 1);
