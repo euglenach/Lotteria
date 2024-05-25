@@ -1,7 +1,7 @@
 {
-  "name": "com.euglenach.lotteria",
-  "version": "0.2.1",
-  "displayName": "Lotteria",
+  "name": "com.euglenach.lotteriea",
+  "version": "0.3.0",
+  "displayName": "Lotteriea",
   "description": "simple lottery system for C#",
   "dependencies": {
     "com.unity.mathematics": "1.2.6"
