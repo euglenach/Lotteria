@@ -46,8 +46,6 @@ namespace LotterySystem
         
         public static TWeight WeightRandom<TWeight>(params TWeight[] weightTable) where TWeight : IWeight => core.WeightRandom(weightTable);
         
-        public static IWeight WeightRandom(ReadOnlySpan<IWeight> weightTable) => core.WeightRandom(weightTable);
-        
         public static TWeight WeightRandom<TWeight>(ReadOnlySpan<TWeight> weightTable) where TWeight : IWeight => core.WeightRandom(weightTable);
         
         public static ref IWeight WeightRandomRef(params IWeight[] weightTable) => ref core.WeightRandomRef(weightTable);
