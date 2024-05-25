@@ -1,27 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Random = Unity.Mathematics.Random;
 
 namespace LotterySystem
 {
-    public struct LotteriaBox
+    public struct LotterieaBox
     {
         private Random random;
         
-        public LotteriaBox(uint seed)
+        public LotterieaBox(uint seed)
         {
             random = new Random(seed);
         }
 
-        public LotteriaBox(Random random)
+        public LotterieaBox(Random random)
         {
             this.random = random;
         }
         
-        public static LotteriaBox CreateFromIndex(uint index)
+        public static LotterieaBox CreateFromIndex(uint index)
         {
-            return new LotteriaBox(Random.CreateFromIndex(index));
+            return new LotterieaBox(Random.CreateFromIndex(index));
         }
 
         public void InitState(uint seed = 0x6E624EB7u)

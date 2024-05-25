@@ -8,9 +8,9 @@ namespace LotterySystem
     /// <summary>
     /// 抽選系
     /// </summary>
-    public static class Lotteria
+    public static class Lotteriea
     {
-        private static LotteriaBox core = new((uint)Random.Range(0, 0x6E624EB7u + 1));
+        private static LotterieaBox core = new((uint)Random.Range(0, 0x6E624EB7u + 1));
         
         public static void InitState(uint seed = 0x6E624EB7u)
         {
